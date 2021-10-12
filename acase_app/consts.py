@@ -15,4 +15,4 @@ target = {
 
 # after parsing the next variable must be iqual to a route/path
 # for instance, :/users/home/acase/selenium_drivers
-driver_dir = ':' + '/'.join(os.getcwd().split('/')[:-1]) + '/acase/selenium_drivers'
+driver_dir = ':' + '/'.join(os.getcwd().split('/')[:-1]) + '/ACASE_Crawler-Scraper/selenium_drivers'
