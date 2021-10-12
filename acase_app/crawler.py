@@ -36,7 +36,17 @@ class Crawler(webdriver.Chrome):
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
         identifier = soup.find_ads()
-        print(f'This is the identifier: {identifier}')
-        close_btn = self.find_element_by_id(identifier)
-        close_btn.click()
+        for tag, keyattr_list in identifier.items():
+            for keyattr in keyattr_list:
+                for key, attr in keyattr.items():
+                    try:
+                        self.find_element_by_css_selector(
+                            f'{tag}[{key}="{attr}"]'
+                        ).click()
+                    except:
+                        print('something went wrong')
+        # print(count)
+        # print(f'This is the identifier: {identifier}')
+        # close_btn = self.find_element_by_id(identifier)
+        # close_btn.click()
 
