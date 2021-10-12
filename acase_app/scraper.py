@@ -5,7 +5,7 @@ class Scraper():
     def __init__(self, html_element):
         self.soup = BeautifulSoup(html_element, 'html.parser')
 
-    def bs4(self):
+    def find_ads(self):
         # Get all divs elements from a website
         divs = self.soup.find_all('div')
 
@@ -22,7 +22,3 @@ class Scraper():
                             # print('Bingo!!!')
                             # print(f'número de divs: {count}')
                             # return
-
-    def encap(self, html_element):
-        soup = BeautifulSoup(html_element, 'html.parser')
-        return soup

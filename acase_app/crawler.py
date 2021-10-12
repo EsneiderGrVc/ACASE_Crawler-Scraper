@@ -8,11 +8,11 @@ class Crawler(webdriver.Chrome):
         # Driver path is required for Selenium to execute the brower driver
         self.driver_path = driver_path
 
-        # Teardown indicates to the program if it must closed the window browser
+        # Teardown indicates to the program if it must to close the window browser
         # Once the script is ended or let it open.
         self.teardown = teardown
 
-        # The OS PATH takes the driver_path to concatenate, then Selenium executes it
+        # The OS PATH takes the driver_path to concatenate it, then Selenium executes it
         os.environ['PATH'] += self.driver_path
 
         # The Super method brings to Crawler class some attributes given in
@@ -20,16 +20,22 @@ class Crawler(webdriver.Chrome):
         super(Crawler, self).__init__()
 
     def start(self, url):
+        """ Open the browser with a given url"""
         self.get(url)
 
     def __exit__(self, *args):
+        """Close the browser application if teardown
+        is True once the program is done"""
         if self.teardown:
             super().__exit__(*args)
 
     def ads_breaker(self):
+        """ This method searching for the body html element,
+        sends it to the Scraper class to find potencials pop-ups
+        and finally close them"""
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
-        identifier = soup.bs4()
+        identifier = soup.find_ads()
         print(f'This is the identifier: {identifier}')
         close_btn = self.find_element_by_id(identifier)
         close_btn.click()
