@@ -2,10 +2,11 @@ from acase_app.crawler import Crawler
 from acase_app.consts import target
 from acase_app.scraper import Scraper
 
-# with open('mercer', 'r') as mercer:
+# with open('hrt', 'r') as mercer:
     # scraper = Scraper(mercer)
     # scraper.find_ads()
 
-with Crawler() as bot:
-    bot.start(target.get('mercer'))
+with Crawler(teardown=True) as bot:
+    bot.start(target.get('hrt'))
     bot.ads_breaker()
+    bot.link_visitor()

@@ -1,4 +1,5 @@
 import os
+import time
 from selenium import webdriver
 from acase_app.consts import driver_dir
 from acase_app.scraper import Scraper
@@ -35,18 +36,30 @@ class Crawler(webdriver.Chrome):
         and finally close them"""
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
-        identifier = soup.find_ads()
-        for tag, keyattr_list in identifier.items():
+        target_element = soup.find_ads()
+
+        for tag, keyattr_list in target_element.items():
             for keyattr in keyattr_list:
                 for key, attr in keyattr.items():
                     try:
                         self.find_element_by_css_selector(
                             f'{tag}[{key}="{attr}"]'
                         ).click()
+                        print('Element clicked!')
                     except:
-                        print('something went wrong')
+                        print('The element was clicked or something went wrong')
         # print(count)
         # print(f'This is the identifier: {identifier}')
         # close_btn = self.find_element_by_id(identifier)
         # close_btn.click()
+
+    def link_visitor(self):
+        html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
+        print(html_element)
+        soup = Scraper(html_element)
+        links = soup.get_links()
+        for elem in links:
+            print(elem)
+        print(type(links))
+
 

@@ -8,15 +8,14 @@ class Scraper():
         # execute this program without open the browser
 
         # with open('hrt', 'w') as f:
-            # f.write(self.soup.text)
+            # f.write(self.soup.prettify())
 
     def find_ads(self):
-        element_target = {
-            "a": []
-        }
+        element_target = {'a': [], 'button': []}
         # Get all divs elements from a website
         divs = self.soup.find_all('div')
         # Iterate each div element
+        # print(divs)
         for div in divs:
             # Iterate the attributes that contains each div tag
             for attribute in div.attrs.values():
@@ -26,6 +25,11 @@ class Scraper():
                         for key, attr in anchor.attrs.items():
                             if search('close', str(attr).lower()):
                                 element_target['a'].append({str(key): attr})
-                                # print(f'{key}: {attr}')
-                    # return div.find('a').attrs.get('id')
+                    for button in div.find_all('button'):
+                        for key, attr in button.attrs.items():
+                            if search('close', str(attr).lower()):
+                                element_target['button'].append({str(key): attr})
         return element_target
+
+    def get_links(self):
+        return self.soup.find_all('a')
