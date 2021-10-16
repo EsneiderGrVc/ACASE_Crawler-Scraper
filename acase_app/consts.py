@@ -8,7 +8,7 @@ target = {
     'mckinsey': 'https://www.mckinsey.com/',
     'bcg': 'https://www.bcg.com/en-co/',
     'manpower': 'https://manpowergroupcolombia.co/',
-    'wired': 'https://www.wired.com/',
+    # 'wired': 'https://www.wired.com/',
     'hrt': 'https://www.humanresourcestoday.com/',
     'thehrdirector': 'https://www.thehrdirector.com/business-news/'
 }

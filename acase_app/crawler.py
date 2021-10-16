@@ -34,17 +34,17 @@ class Crawler(webdriver.Chrome):
     def ads_breaker(self):
         """ This method searching for the body html element,
         sends it to the Scraper class to find potencials pop-ups
-        and finally close them"""
+        and finally close them """
+
         try:
             self.find_element_by_xpath('/html/body').send_keys(Keys.ESCAPE)
             return
         except:
             pass
+
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
         target_element = soup.find_ads()
-
-        print(target_element)
 
         for tag, keyattr_list in target_element.items():
             for keyattr in keyattr_list:
@@ -53,7 +53,7 @@ class Crawler(webdriver.Chrome):
                         self.find_element_by_css_selector(
                             f'{tag}[{key}="{attr}"]'
                         ).click()
-                        print('\n:: Pop-up deleted ::\n')
+                        print(colored('\n:: Pop-up deleted ::\n', 'green'))
                     except:
                         print('Pop-up still alive =(')
 
@@ -65,45 +65,44 @@ class Crawler(webdriver.Chrome):
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
 
-        target = soup.find_search_enable_btn()
-        print(target)
+        elms_obj = soup.find_search_enable_btn()
 
-        for elem in target:
-            for attr, value in elem.items():
-                try:
-                    if str(attr) == 'class':
-                        for element in value:
-                            btn = self.find_elements_by_class_name(f'{element}')
-                            for e in btn:
-                                try:
-                                    e.click()
-                                    print(colored('\n:: The Searching is able ::\n', 'green'))
-                                    return
-                                except:
-                                    print('The searching isn\'t able yet =(')
-                except:
-                    pass
-                btn = self.find_elements_by_css_selector(
-                    f'span[{attr}="{value}"]'
-                )
-                for element in btn:
-                    try:
-                        element.click()
-                        print('\n:: The Searching is able ::\n')
-                        return
-                    except:
-                        print('The searching isn\'t able yet =(')
+        for tag, target in elms_obj.items():
+            if len(target) > 0:
+                for elem in target:
+                    for attr, value in elem.items():
+                        try:
+                            if str(attr) == 'class':
+                                for element in value:
+                                    btn = self.find_elements_by_class_name(f'{element}')
+                                    for e in btn:
+                                        try:
+                                            e.click()
+                                            print(colored('\n:: The Searching is able ::\n', 'green'))
+                                            return
+                                        except:
+                                            print('The searching isn\'t able yet =(')
+                        except:
+                            pass
+                        btn = self.find_elements_by_css_selector(
+                            f'{tag}[{attr}="{value}"]'
+                        )
+                        for element in btn:
+                            try:
+                                element.click()
+                                print(colored('\n:: The Searching is able ::\n', 'green'))
+                                return
+                            except:
+                                print('The searching isn\'t able yet =(')
 
 
     def perform_search(self):
         """ This method writes into the placelholder input
-        and perform the searching depends on the KeyWord
-        """
+        and perform the searching depends on the KeyWord """
+
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
         target = soup.find_search_field()
-
-        # print(target)
 
         for elem in target:
             for attr, value in elem.items():
@@ -114,7 +113,7 @@ class Crawler(webdriver.Chrome):
                     try:
                         element.send_keys('Leadership')
                         element.send_keys(Keys.RETURN)
-                        print('\n:: Placeholder fullfilled ::\n')
+                        print(colored('\n:: Placeholder fullfilled ::\n', 'green'))
                         return
                     except:
                         print('Can\'t type in search placeholder =(')

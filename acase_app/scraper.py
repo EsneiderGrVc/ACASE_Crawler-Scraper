@@ -47,9 +47,9 @@ class Scraper():
 
 
     def find_search_enable_btn(self):
-        spans = self.soup.find_all('span')
-        buttons = self.soup.find_all('button')
-        anchors = self.soup.find_all('a')
+        """ This method returns for the 'attr=value'
+        of the element that once clicked allows write
+        in the placeholder"""
 
         target = {
             'span':  [],
@@ -57,25 +57,11 @@ class Scraper():
             'a': []
         }
 
-        for btn in spans:
-            for attr, value in btn.attrs.items():
-                if search('search', str(value).lower()):
-                    target.append({attr: value})
-
-        if len(target) > 0:
-            return target
-
-        for btn in buttons:
-            for attr, value in btn.attrs.items():
-                if search('search', str(value).lower()):
-                    target.append({attr: value})
-
-        if len(target) > 0:
-            return target
-
-        for btn in anchors:
-            for attr, value in btn.attrs.items():
-                if search('search', str(value).lower()):
-                    target.append({attr: value})
-
-        return target
+        for tag in target.keys():
+            elems = self.soup.find_all(str(tag))
+            for btn in elems:
+                for attr, value in btn.attrs.items():
+                    if search('search', str(value).lower()):
+                        target[tag].append({attr: value})
+                if len(target[tag]) > 0:
+                    return target
