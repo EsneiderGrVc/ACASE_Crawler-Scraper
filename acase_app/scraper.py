@@ -15,7 +15,6 @@ class Scraper():
         # Get all divs elements from a website
         divs = self.soup.find_all('div')
         # Iterate each div element
-        # print(divs)
         for div in divs:
             # Iterate the attributes that contains each div tag
             for attribute in div.attrs.values():
@@ -31,5 +30,52 @@ class Scraper():
                                 element_target['button'].append({str(key): attr})
         return element_target
 
-    def get_links(self):
-        return self.soup.find_all('a')
+
+
+    def find_search_field(self):
+        inputs = self.soup.find_all('input')
+        target = []
+
+        for input_elem in inputs:
+            for attr, value in input_elem.attrs.items():
+                if str(attr) == 'placeholder' and search('search', str(value).lower()):
+                    target.append({attr: value})
+                if str(attr) == 'placeholder' and search('buscar', str(value).lower()):
+                    target.append({attr: value})
+
+        return target
+
+
+    def find_search_enable_btn(self):
+        spans = self.soup.find_all('span')
+        buttons = self.soup.find_all('button')
+        anchors = self.soup.find_all('a')
+
+        target = {
+            'span':  [],
+            'button': [],
+            'a': []
+        }
+
+        for btn in spans:
+            for attr, value in btn.attrs.items():
+                if search('search', str(value).lower()):
+                    target.append({attr: value})
+
+        if len(target) > 0:
+            return target
+
+        for btn in buttons:
+            for attr, value in btn.attrs.items():
+                if search('search', str(value).lower()):
+                    target.append({attr: value})
+
+        if len(target) > 0:
+            return target
+
+        for btn in anchors:
+            for attr, value in btn.attrs.items():
+                if search('search', str(value).lower()):
+                    target.append({attr: value})
+
+        return target
