@@ -6,7 +6,7 @@ from acase_app.scraper import Scraper
 from selenium.webdriver.common.keys import Keys
 
 class Crawler(webdriver.Chrome):
-    def __init__(self, driver_path=driver_dir, teardown=False):
+    def __init__(self, driver_path=driver_dir, teardown=False, keywords=False):
         # Driver path is required for Selenium to execute the brower driver
         self.driver_path = driver_path
 
@@ -16,6 +16,8 @@ class Crawler(webdriver.Chrome):
 
         # The OS PATH takes the driver_path to concatenate it, then Selenium executes it
         os.environ['PATH'] += self.driver_path
+
+        self.keywords = keywords
 
         # The Super method brings to Crawler class some attributes given in
         # webdriver class,  like Session_id for instance.
@@ -100,6 +102,7 @@ class Crawler(webdriver.Chrome):
         """ This method writes into the placelholder input
         and perform the searching depends on the KeyWord """
 
+        self.implicitly_wait(3)
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
         target = soup.find_search_field()
@@ -111,9 +114,16 @@ class Crawler(webdriver.Chrome):
                 )
                 for element in placeholder:
                     try:
-                        element.send_keys('Leadership')
+                        element.send_keys(self.keywords)
                         element.send_keys(Keys.RETURN)
                         print(colored('\n:: Placeholder fullfilled ::\n', 'green'))
                         return
                     except:
                         print('Can\'t type in search placeholder =(')
+
+
+    def extract_results(self):
+        html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
+        soup = Scraper(html_element)
+        target = soup.get_results(self.keywords)
+        return target
