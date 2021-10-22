@@ -6,7 +6,7 @@ from acase_app.scraper import Scraper
 from selenium.webdriver.common.keys import Keys
 
 class Crawler(webdriver.Chrome):
-    def __init__(self, driver_path=driver_dir, teardown=False, keywords=False):
+    def __init__(self, url, driver_path=driver_dir, teardown=False, keywords=False):
         # Driver path is required for Selenium to execute the brower driver
         self.driver_path = driver_path
 
@@ -18,14 +18,14 @@ class Crawler(webdriver.Chrome):
         os.environ['PATH'] += self.driver_path
 
         self.keywords = keywords
-
+        self.url = url
         # The Super method brings to Crawler class some attributes given in
         # webdriver class,  like Session_id for instance.
         super(Crawler, self).__init__()
 
-    def start(self, url):
+    def start(self):
         """ Open the browser with a given url"""
-        self.get(url)
+        self.get(self.url)
 
     def __exit__(self, *args):
         """Close the browser application if teardown
@@ -119,7 +119,7 @@ class Crawler(webdriver.Chrome):
                         print(colored('\n:: Placeholder fullfilled ::\n', 'green'))
                         return
                     except:
-                        print('Can\'t type in search placeholder =(')
+                        print(colored('Can\'t type inside the search input', 'yellow'))
 
 
     def extract_results(self):

@@ -7,17 +7,26 @@ from acase_app.scraper import Scraper
     # scraper = Scraper()
     # scraper.find_input()
 
+keywords = 'liderazgo'
 # for _, url in target.items():
-    # with Crawler(teardown=True) as bot:
+    # with Crawler(teardown=True, keywords=keywords) as bot:
         # bot.start(url)
         # bot.ads_breaker()
         # bot.enable_search()
         # bot.perform_search()
         # bot.extract_results()
-keywords = 'liderazgo'
-with Crawler(teardown=False, keywords=keywords) as bot:
-    bot.start(target.get('mercer'))
+
+farming = []
+
+with Crawler(url=target.get('gartner'), teardown=False, keywords=keywords) as bot:
+    bot.start()
     bot.ads_breaker()
     bot.enable_search()
     bot.perform_search()
-    print(bot.extract_results())
+    results = bot.extract_results()
+    print(f'Results: {results}')
+    # for result in results:
+        # farming.append(result)
+
+# print(farming)
+# print(f'\n:: Se han minado {len(farming)} recursos ::')

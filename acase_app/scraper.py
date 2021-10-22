@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from re import search
 from acase_app.consts import months_format
+import pdb
 
 class Scraper():
     def __init__(self, html_element):
@@ -74,28 +75,68 @@ class Scraper():
 
         target = {
             'li': [],
-            # 'div': [],
+            'div': [],
         }
-
+        # Iterate each target's key to get elements
+        # with BeautifulSoup's find_all method
         for tag in target.keys():
+            # Get all elements of type {tag}
             elems = self.soup.find_all(str(tag))
+            # Traverse all elems until find the element
+            # that corresponds to the correct one
             for element in elems:
                 p = 0
                 a = 0
-                for e in element.find_all('p'):
-                    for text in e:
-                        if len(text) > 100:
-                            if search(keyword.lower(), str(text.string).lower()):
-                                p += 1
+                h = 0
+                # Searching for a p element with more than 100 letters
+                # inside it's content & contains the keyword within
+                for html_e in ['p', 'div']:
+                    for e in element.find_all(str(html_e)):
+                        concatenated_text = ''
+                        for text in e:
+                            if len(str(text.string).strip()) > 100:
+                                if len(e) > 1:
+                                    for single_text in e:
+                                        if single_text.string:
+                                            concatenated_text += single_text.string
+                                else:
+                                    concatenated_text = text.string
+
+                                if search(keyword.lower(), str(concatenated_text).lower()):
+                                    p += 1
+                                # Searching for a h3 title with a keyword
+                                # inside it's content
+                                for titles in element.find_all(['h3', 'a']):
+                                    concatenated_title = ''
+                                    if len(titles) > 1:
+                                        for single_title in titles:
+                                            if single_title.string:
+                                                concatenated_title += single_title.string
+                                    else:
+                                        concatenated_title = titles.string
+
+                                    if search(keyword.lower(), str(concatenated_title).lower()) or\
+                                            (titles.name == 'a' and len(titles.attrs.get('href') > 10)):
+                                        h += 1
+                                        pdb.set_trace()
+
+                print(f'p: {p}')
+                print(f'a: {a}')
+                print(f'h: {h}')
+                # Searching for an anchor element within
+                # parent (li or div) element
                 for anc in element.find_all('a'):
                     for anchor in anc:
                         if len(anchor) > 0:
                             a += 1
-                if p > 0 and a > 0:
+                # Add the li or div element if exits
+                # an valid description && a link - or -
+                # a link && a valid title
+                if (p > 0 and a > 0) or (a > 0 and h > 0):
                     target[tag].append(element)
-        if len(target[tag]) > 0:
-            result = self.results_to_object(target[tag], keyword)
-            return result
+            if len(target[tag]) > 0:
+                result = self.results_to_object(target[tag], keyword)
+                return result
 
 
     def results_to_object(self, results, keyword):
@@ -128,8 +169,9 @@ class Scraper():
             # Find the Article's url
             anchors = element.find_all('a')
             for anchor in anchors:
-                if len(anchor.attrs.get('href')) > 50:
-                       item['url'] = anchor.attrs.get('href')
+                # print(anchor)
+                if (anchor.attrs.get('href') != None) and (len(anchor.attrs.get('href')) > 50):
+                    item['url'] = anchor.attrs.get('href')
 
             # Find the Article's date
             spans = element.find_all('span')

@@ -20,6 +20,9 @@ months_format = ['january', 'february', 'march', 'april', 'may', 'june',
                  'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre',
                  'diciembre']
 
+text_formatting_html_elements = ['b', 'em', 'i', 'small', 'strong', 'small',
+                            'sub', 'sup', 'ins', 'mark']
+
 # after parsing the next variable must be iqual to a route/path
 # for instance, :/users/home/acase/selenium_drivers
 driver_dir = ':' + '/'.join(os.getcwd().split('/')[:-1]) + '/ACASE_Crawler-Scraper/selenium_drivers'
