@@ -84,19 +84,23 @@ class Scraper():
             elems = self.soup.find_all(str(tag))
             # Traverse all elems until find the element
             # that corresponds to the correct one
-            count = 0
             for element in elems:
-                if tag != 'li':
-                    element_classes = element.attrs.get('class')
+                count = False
+                if element.name != 'li':
+                    # print(element.name, 'No es un li')
+                    element_classes = element.attrs.get('class') # ['search-item', 'row']
                     if element_classes:
                         for _class in element_classes:
                             if search('search', _class):
-                                count += 1
-                                print('bingo', count)
-                                print(element_classes)
+                                count = True
                     else:
-                        print('element class doesnt exists')
+                        pass
+
+                if (element.name != 'li' and count == False):
+                    continue
+                    # print(f'element tag_name: {element.name}')
                 # if (tag != 'li') and (search('search', element.attrs.get('class'))):
+                print(element.attrs.get('class'))
                 p = 0
                 h = 0
                 # Searching for a p element with more than 100 letters
@@ -135,8 +139,8 @@ class Scraper():
                 # a link && a valid title
                 if (p > 0 and h > 0):
                     target[tag].append(element)
+                    pdb.set_trace()
             if len(target[tag]) > 0:
-                pdb.set_trace()
                 result = self.results_to_object(target[tag], keyword)
                 return result
 
