@@ -84,9 +84,20 @@ class Scraper():
             elems = self.soup.find_all(str(tag))
             # Traverse all elems until find the element
             # that corresponds to the correct one
+            count = 0
             for element in elems:
+                if tag != 'li':
+                    element_classes = element.attrs.get('class')
+                    if element_classes:
+                        for _class in element_classes:
+                            if search('search', _class):
+                                count += 1
+                                print('bingo', count)
+                                print(element_classes)
+                    else:
+                        print('element class doesnt exists')
+                # if (tag != 'li') and (search('search', element.attrs.get('class'))):
                 p = 0
-                a = 0
                 h = 0
                 # Searching for a p element with more than 100 letters
                 # inside it's content & contains the keyword within
@@ -115,26 +126,17 @@ class Scraper():
                                     else:
                                         concatenated_title = titles.string
 
-                                    if search(keyword.lower(), str(concatenated_title).lower()) or\
-                                            (titles.name == 'a' and len(titles.attrs.get('href') > 10)):
+                                    if search(keyword.lower(), str(concatenated_title).lower()):
+                                            # (titles.name == 'a' and len(titles.attrs.get('href') > 10)):
                                         h += 1
-                                        pdb.set_trace()
 
-                print(f'p: {p}')
-                print(f'a: {a}')
-                print(f'h: {h}')
-                # Searching for an anchor element within
-                # parent (li or div) element
-                for anc in element.find_all('a'):
-                    for anchor in anc:
-                        if len(anchor) > 0:
-                            a += 1
                 # Add the li or div element if exits
                 # an valid description && a link - or -
                 # a link && a valid title
-                if (p > 0 and a > 0) or (a > 0 and h > 0):
+                if (p > 0 and h > 0):
                     target[tag].append(element)
             if len(target[tag]) > 0:
+                pdb.set_trace()
                 result = self.results_to_object(target[tag], keyword)
                 return result
 
