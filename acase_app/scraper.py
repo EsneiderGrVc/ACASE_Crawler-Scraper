@@ -69,7 +69,7 @@ class Scraper():
                     return target
 
 
-    def get_results(self, keyword='liderazgo'):
+    def get_results(self, url, keyword='liderazgo'):
         """ This method returns a list of articles
         displayed on the current website"""
 
@@ -92,7 +92,8 @@ class Scraper():
                     if element_classes:
                         for _class in element_classes:
                             if search('search', _class):
-                                count = True
+                                if len(self.soup.find_all(tag, class_=_class)) > 1:
+                                    count = True
                     else:
                         pass
 
@@ -100,9 +101,8 @@ class Scraper():
                     continue
                     # print(f'element tag_name: {element.name}')
                 # if (tag != 'li') and (search('search', element.attrs.get('class'))):
-                print(element.attrs.get('class'))
-                p = 0
-                h = 0
+                article_description = 0
+                article_title = 0
                 # Searching for a p element with more than 100 letters
                 # inside it's content & contains the keyword within
                 for html_e in ['p', 'div']:
@@ -118,7 +118,7 @@ class Scraper():
                                     concatenated_text = text.string
 
                                 if search(keyword.lower(), str(concatenated_text).lower()):
-                                    p += 1
+                                    article_description += 1
                                 # Searching for a h3 title with a keyword
                                 # inside it's content
                                 for titles in element.find_all(['h3', 'a']):
@@ -130,22 +130,21 @@ class Scraper():
                                     else:
                                         concatenated_title = titles.string
 
-                                    if search(keyword.lower(), str(concatenated_title).lower()):
-                                            # (titles.name == 'a' and len(titles.attrs.get('href') > 10)):
-                                        h += 1
+                                    if search(keyword.lower(), str(concatenated_title).lower()) or\
+                                            (titles.name == 'a' and len(titles.attrs.get('href')) > 10):
+                                        article_title += 1
 
                 # Add the li or div element if exits
                 # an valid description && a link - or -
                 # a link && a valid title
-                if (p > 0 and h > 0):
+                if (article_description > 0 and article_title > 0):
                     target[tag].append(element)
-                    pdb.set_trace()
             if len(target[tag]) > 0:
-                result = self.results_to_object(target[tag], keyword)
+                result = self.results_to_object(target[tag], keyword, url)
                 return result
 
 
-    def results_to_object(self, results, keyword):
+    def results_to_object(self, results, keyword, url):
         """ This method takes a list of articles,
         to convert them into a parsed object """
 
@@ -153,17 +152,20 @@ class Scraper():
 
         for element in results:
             item = {}
+            item['source_url'] = url
             # Find the Article's title
             h = element.find('h3')
-            if len(h) != 0:
+            if not search('NoneType', str(type(h))):
                 item['title'] = h.string
             else:
                 anchors = element.find_all('a')
-                anchor_title = []
+                anchor_title = ''
                 for anchor in anchors:
                     # if anchor has text related with a title,
                     # append to anchor_title
-                    pass
+                    anchor_title += anchor.string
+                item['title'] = anchor_title
+                # pdb.set_trace()
                 if len(anchor_title) == 0:
                     divs = element.find_all('div')
                     div_title = []
@@ -187,12 +189,29 @@ class Scraper():
                         item['date'] = span.string
 
             # Find the Article's body
-            ps = element.find_all('p')
-            for p in ps:
-                for text in p:
-                    if len(text) > 100:
-                        if search(keyword.lower(), str(text.string).lower()):
-                            item['text'] = text.string
+            # ps = element.find_all('p')
+            # for p in ps:
+                # for text in p:
+                    # if len(text) > 100:
+                        # if search(keyword.lower(), str(text.string).lower()):
+                            # item['text'] = text.string
+
+            # If text if not yet in item dict
+            # if not 'text' in item:
+            for html_e in ['p', 'div']:
+                for e in element.find_all(str(html_e)):
+                    concatenated_text = ''
+                    for text in e:
+                        if len(str(text.string).strip()) > 100:
+                            if len(e) > 1:
+                                for single_text in e:
+                                    if single_text.string:
+                                        concatenated_text += single_text.string
+                            else:
+                                concatenated_text = text.string
+                            if search(keyword.lower(), concatenated_text.lower()):
+                                item['text'] = concatenated_text.strip()
+
 
             item['Associated_KW'] = keyword
             articles.append(item)

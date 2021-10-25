@@ -18,7 +18,7 @@ keywords = 'liderazgo'
 
 farming = []
 
-with Crawler(url=target.get('gartner'), teardown=True, keywords=keywords) as bot:
+with Crawler(url=target.get('deloitte'), teardown=True, keywords=keywords) as bot:
     bot.start()
     bot.ads_breaker()
     bot.enable_search()

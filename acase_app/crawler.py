@@ -125,5 +125,5 @@ class Crawler(webdriver.Chrome):
     def extract_results(self):
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
-        target = soup.get_results(self.keywords)
+        target = soup.get_results(self.url, self.keywords)
         return target
