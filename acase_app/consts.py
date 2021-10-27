@@ -1,17 +1,57 @@
 import os
 
-target = {
-    'mercer': 'https://www.latam.mercer.com/',
-    'gartner': 'https://www.gartner.es/es',
-    'deloitte': 'https://www2.deloitte.com/co/es/pages/audit/topics/biblioteca-tecnica.html?icid=nav2_biblioteca-tecnica',
-    'weforum': 'https://www.weforum.org/',
-    'mckinsey': 'https://www.mckinsey.com/',
-    'bcg': 'https://www.bcg.com/en-co/',
-    'manpower': 'https://manpowergroupcolombia.co/',
-    # 'wired': 'https://www.wired.com/',
-    'hrt': 'https://www.humanresourcestoday.com/',
-    'thehrdirector': 'https://www.thehrdirector.com/business-news/'
-}
+target = [
+    {
+        'name': 'mercer',
+        'url': 'https://www.latam.mercer.com/',
+        'keywords': ['liderazgo', 'seguridad', 'recursos humanos', 'innovación', 'transformación digital']
+    },
+    {
+        'name': 'gartner',
+        'url': 'https://www.gartner.es/es',
+        'keywords': ['liderazgo', 'seguridad', 'recursos humanos', 'innovación', 'transformación digital']
+    },
+    {
+        'name': 'deloitte',
+        'url':'https://www2.deloitte.com/co/es/pages/audit/topics/biblioteca-tecnica.html?icid=nav2_biblioteca-tecnica',
+        'keywords': []
+    },
+    {
+        'name': 'weforum',
+        'url': 'https://www.weforum.org/',
+        'keywords': []
+    },
+    {
+        'name': 'mckinsey',
+        'url': 'https://www.mckinsey.com/',
+        'keywords': []
+    },
+    {
+        'name': 'bcg',
+        'url': 'https://www.bcg.com/en-co/',
+        'keywords': []
+    },
+    {
+        'name': 'manpower',
+        'url': 'https://manpowergroupcolombia.co/',
+        'keywords': []
+    },
+    {
+        'name': 'wired',
+        'url': 'https://www.wired.com/',
+        'keywords': []
+    },
+    {
+        'name': 'hrt',
+        'url': 'https://www.humanresourcestoday.com/',
+        'keywords': []
+    },
+    {
+        'name': 'thehrdirector',
+        'url': 'https://www.thehrdirector.com/business-news/',
+        'keywords': []
+    }
+]
 
 months_format = ['january', 'february', 'march', 'april', 'may', 'june',
                  'july', 'august', 'september', 'october', 'november', 'december',

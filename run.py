@@ -1,32 +1,32 @@
 import time
+import json
 from acase_app.crawler import Crawler
 from acase_app.consts import target
 from acase_app.scraper import Scraper
 
-# with open('hrt', 'r') as mercer:
-    # scraper = Scraper()
-    # scraper.find_input()
+def run_bot(target):
 
-keywords = 'liderazgo'
-# for _, url in target.items():
-    # with Crawler(teardown=True, keywords=keywords) as bot:
-        # bot.start(url)
-        # bot.ads_breaker()
-        # bot.enable_search()
-        # bot.perform_search()
-        # bot.extract_results()
+    farming = []
 
-farming = []
+    if type(target) is not list:
+        print('Please insert a list of objects')
+    else:
+        for resource in target:
+            if len(resource.get('keywords')) == 0:
+                continue
+            for keyword in resource.get('keywords'):
+                try:
+                    with Crawler(url=resource.get('url'), teardown=True, keywords=keyword) as bot:
+                        bot.start()
+                        bot.ads_breaker()
+                        bot.enable_search()
+                        bot.perform_search()
+                        results = bot.extract_results() # [{}, {}, {}]
+                        for result in results:
+                            farming.append(result)
+                except:
+                    print('Something went wrong')
+        with open('results.json', 'w', encoding='utf-8') as f:
+            json.dump(farming, f)
 
-with Crawler(url=target.get('deloitte'), teardown=True, keywords=keywords) as bot:
-    bot.start()
-    bot.ads_breaker()
-    bot.enable_search()
-    bot.perform_search()
-    results = bot.extract_results()
-    print(f'Results: {results}')
-    # for result in results:
-        # farming.append(result)
-
-# print(farming)
-# print(f'\n:: Se han minado {len(farming)} recursos ::')
+run_bot(target)

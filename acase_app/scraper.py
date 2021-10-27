@@ -152,11 +152,11 @@ class Scraper():
 
         for element in results:
             item = {}
-            item['source_url'] = url
+            item['Source_url'] = url
             # Find the Article's title
             h = element.find('h3')
             if not search('NoneType', str(type(h))):
-                item['title'] = h.string
+                item['Title'] = h.string
             else:
                 anchors = element.find_all('a')
                 anchor_title = ''
@@ -164,7 +164,7 @@ class Scraper():
                     # if anchor has text related with a title,
                     # append to anchor_title
                     anchor_title += anchor.string
-                item['title'] = anchor_title
+                item['Title'] = anchor_title
                 # pdb.set_trace()
                 if len(anchor_title) == 0:
                     divs = element.find_all('div')
@@ -179,14 +179,14 @@ class Scraper():
             for anchor in anchors:
                 # print(anchor)
                 if (anchor.attrs.get('href') != None) and (len(anchor.attrs.get('href')) > 50):
-                    item['url'] = anchor.attrs.get('href')
+                    item['Url'] = anchor.attrs.get('href')
 
             # Find the Article's date
             spans = element.find_all('span')
             for span in spans:
                 for month in months_format:
                     if search(month, span.string.lower()):
-                        item['date'] = span.string
+                        item['Date'] = span.string
 
             # Find the Article's body
             # ps = element.find_all('p')
@@ -210,8 +210,7 @@ class Scraper():
                             else:
                                 concatenated_text = text.string
                             if search(keyword.lower(), concatenated_text.lower()):
-                                item['text'] = concatenated_text.strip()
-
+                                item['Text'] = concatenated_text.strip()
 
             item['Associated_KW'] = keyword
             articles.append(item)
