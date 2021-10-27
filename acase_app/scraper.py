@@ -91,7 +91,7 @@ class Scraper():
                     element_classes = element.attrs.get('class') # ['search-item', 'row']
                     if element_classes:
                         for _class in element_classes:
-                            if search('search', _class):
+                            if search('search', _class): # or search('result', _class)
                                 if len(self.soup.find_all(tag, class_=_class)) > 1:
                                     count = True
                     else:
@@ -163,9 +163,8 @@ class Scraper():
                 for anchor in anchors:
                     # if anchor has text related with a title,
                     # append to anchor_title
-                    anchor_title += anchor.string
+                    anchor_title += anchor.get_text()
                 item['Title'] = anchor_title
-                # pdb.set_trace()
                 if len(anchor_title) == 0:
                     divs = element.find_all('div')
                     div_title = []
@@ -178,7 +177,7 @@ class Scraper():
             anchors = element.find_all('a')
             for anchor in anchors:
                 # print(anchor)
-                if (anchor.attrs.get('href') != None) and (len(anchor.attrs.get('href')) > 50):
+                if (anchor.attrs.get('href') != None) and (len(anchor.attrs.get('href')) > 19):
                     item['Url'] = anchor.attrs.get('href')
 
             # Find the Article's date

@@ -1,20 +1,20 @@
 import os
 
 target = [
-    {
-        'name': 'mercer',
-        'url': 'https://www.latam.mercer.com/',
-        'keywords': ['liderazgo', 'seguridad', 'recursos humanos', 'innovación', 'transformación digital']
-    },
-    {
-        'name': 'gartner',
-        'url': 'https://www.gartner.es/es',
-        'keywords': ['liderazgo', 'seguridad', 'recursos humanos', 'innovación', 'transformación digital']
-    },
+    # {
+        # 'name': 'mercer',
+        # 'url': 'https://www.latam.mercer.com/',
+        # 'keywords': ['liderazgo', 'seguridad', 'recursos humanos', 'innovación', 'transformación digital']
+    # },
+    # {
+        # 'name': 'gartner',
+        # 'url': 'https://www.gartner.es/es',
+        # 'keywords': ['liderazgo', 'seguridad', 'recursos humanos', 'innovación', 'transformación digital'],
+    # },
     {
         'name': 'deloitte',
         'url':'https://www2.deloitte.com/co/es/pages/audit/topics/biblioteca-tecnica.html?icid=nav2_biblioteca-tecnica',
-        'keywords': []
+        'keywords': ['liderazgo']
     },
     {
         'name': 'weforum',
