@@ -1,4 +1,5 @@
 import os
+import time
 from termcolor import colored
 from selenium import webdriver
 from acase_app.consts import driver_dir
@@ -123,6 +124,7 @@ class Crawler(webdriver.Chrome):
 
 
     def extract_results(self):
+        time.sleep(3)
         html_element = self.find_element_by_xpath('/html/body').get_attribute('outerHTML')
         soup = Scraper(html_element)
         target = soup.get_results(self.url, self.keywords)

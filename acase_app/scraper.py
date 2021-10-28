@@ -91,7 +91,7 @@ class Scraper():
                     element_classes = element.attrs.get('class') # ['search-item', 'row']
                     if element_classes:
                         for _class in element_classes:
-                            if search('search', _class): # or search('result', _class)
+                            if search('search', _class) or search('result', _class):
                                 if len(self.soup.find_all(tag, class_=_class)) > 1:
                                     count = True
                     else:
@@ -137,6 +137,8 @@ class Scraper():
                 # Add the li or div element if exits
                 # an valid description && a link - or -
                 # a link && a valid title
+
+                # print(article_description, article_title)
                 if (article_description > 0 and article_title > 0):
                     target[tag].append(element)
             if len(target[tag]) > 0:
@@ -172,7 +174,6 @@ class Scraper():
                         # if div has text related with a title,
                         # append to div_title
                         pass
-
             # Find the Article's url
             anchors = element.find_all('a')
             for anchor in anchors:
